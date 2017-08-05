@@ -4,17 +4,11 @@
 
 <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            {% include 'carsys/form_template.html' %}
             
             Username: <input class="form-control" type="text" name="username"><br>
             Password: <input type="password" name="password"><br>
-            First Name: <input type="text" name="f_name"><br>
-            Last Name: <input type="text" name="l_name"><br>
-            Address: <input type="text" name="address"><br>
-            License ID: <input type="text" name="lic_ID"><br>
-            Contact No: <input type="text" name="cont_no"><br>
-            
-            <p>{{ username }}</p>
-            
+                        
             <button type="submit" class="btn btn-success">Submit</button>
 </form>
 {% endblock %}

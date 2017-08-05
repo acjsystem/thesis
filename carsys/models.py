@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+from django.contrib.auth.models import User
 # Create your models here.
 
-class User(models.Model):
-	last_name = models.CharField(max_length=100)
-	first_name = models.CharField(max_length=100)
-	mid_name = models.CharField(max_length=100)
-	license_id = models.CharField(max_length=100)
+class Profile(User):
+  address = models.CharField(max_length=100)
+  license_id = models.CharField(max_length=100)
 	#check whether field can have INTEGER instead of CHAR
-	contact_no = models.CharField(max_length=250)
+  contact_no = models.CharField(max_length=250)
 
-	def __str__(self):
+  def __str__(self):
 		return self.first_name + ' ' + self.last_name
 
 class Car(models.Model):

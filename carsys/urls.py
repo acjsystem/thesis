@@ -5,8 +5,8 @@ from . import views
 app_name = 'carsys'
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^signup/$', views.signup, name='signup'),
-    #url(r'^login/$', views.login, name='login'),
-    #url(r'^logout/$', views.logout, name='logout'),
+    url(r'^$', views.Index.as_view(), name='index'),
+    url(r'^signup/$', views.Signup.as_view(), name='signup'),
+    url(r'^login/$', views.Login.as_view(), name='login'),
+    url(r'^logout/$', views.Logout.as_view(), name='logout'),
 ]
