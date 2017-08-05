@@ -22,13 +22,12 @@ def index(request):
 #	return render(request, 'acjvone/index.html')
 
 class Index(View):
-    template_name = 'carsys/index.html'
-    
+    template_name = 'carsys/index.html'    
     
     def get(self, request,):
       if request.user.is_authenticated():
         return render(request, self.template_name,)
-      return render(request, self.template_name,)
+      return redirect('/login')
  
 class Logout(View):      
   def get(self, request):
