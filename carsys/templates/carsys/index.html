@@ -1,4 +1,9 @@
 {% block body %}
 <h2>dis index yay</h2>
+<h2>{{ led }} </h2>
+<h3>{{ user_data }} </h3>
 {{log_stat}}
+<form action="{% url 'carsys:logout' %}">
+    <input type="submit" value="Logout" />
+</form>
 {% endblock%}

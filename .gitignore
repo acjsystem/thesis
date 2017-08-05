@@ -1,7 +1,7 @@
-*.pyc
-*~
+*.py[cod]
 __pycache__
-myvenv
+*.tmp
+*.swp
+*.log
+keys.json
 db.sqlite3
-/static
-.DS_Store

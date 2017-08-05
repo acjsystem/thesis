@@ -1,2 +1,45 @@
+<html>
+{% load static %}
+<! DOCTYPE html>
+
+<html lang="en-us">
+<head>
+    {% block meta %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="HandheldFriendly" content="true">
+    {% endblock meta %}
+    {% block add_meta %}
+    {% endblock add_meta %}
+    <title>
+        {% block title %}    {% endblock title %}
+    </title>
+
+    {% block head_fonts %}
+    <!-- font-awesome-icons -->
+    <link href="{% static "css/font-awesome.css" %}" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+    {% endblock head_fonts %}
+
+    {% block head_styles %}
+    <!-- Bootstrap -->
+<link rel="stylesheet" type="text/css"
+    href="{% static 'vendor/bootstrap/3.3.6/css/bootstrap.min.css' %}">
+<!-- Bootstrap Material theme -->
+<link rel="stylesheet" type="text/css"
+    href="{% static 'vendor/bootstrap/themes/material/0.5.9/css/bootstrap-material-design.min.css' %}">
+<link rel="stylesheet" type="text/css"
+    href="{% static 'vendor/bootstrap/themes/material/0.5.9/css/ripples.min.css' %}">
+    
+    {% endblock head_styles %}
+
+    {% block head_scripts %}
+
+    {% endblock head_scripts %}
+</head>
 {% block body %}
 {% endblock %}
+
+</html>
