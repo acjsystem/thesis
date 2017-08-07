@@ -1,14 +1,18 @@
 {% extends 'carsys/base.html' %}
-
+{% block title %}Login{% endblock title %}
 {% block body %}
 
-<form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+<form role="form" action="{% url 'carsys:login' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {% include 'carsys/form_template.html' %}
-            
+            <!--{% include 'carsys/form_template.html' %}-->
+            {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+            {% endif %}
             Username: <input class="form-control" type="text" name="username"><br>
             Password: <input type="password" name="password"><br>
-                        
             <button type="submit" class="btn btn-success">Submit</button>
 </form>
+
+<p>Not yet registered? Register <a href="{% url 'carsys:signup' %}">here</a>.</p>
+
 {% endblock %}

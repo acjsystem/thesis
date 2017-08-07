@@ -6,4 +6,18 @@
 <form action="{% url 'carsys:logout' %}">
     <input type="submit" value="Logout" />
 </form>
+<form action="" method="post">
+{% csrf_token %}
+  <input type="radio" name="led" value="On"
+  {% ifequal led "On" %}
+  checked
+  {% endifequal %}
+  > On<br>
+  <input type="radio" name="led" value="Off" 
+  {% ifequal led "Off" %}
+  checked
+  {% endifequal %}
+  > Off<br>
+  <input type="submit" value="Submit" />
+</form>
 {% endblock%}
