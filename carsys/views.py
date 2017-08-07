@@ -18,7 +18,7 @@ class Index(View):
     template_name = 'carsys/index.html'    
     
     def get(self, request,):
-      
+      signup = request.session.pop('signup', False)
       if request.user.is_authenticated():
         context = {
           'user_data': request.user.username,
@@ -45,7 +45,7 @@ class Index(View):
 class Logout(View):      
   def get(self, request):
       logout(request)
-      request.session['signup'] = True
+      request.session['signup'] = False
       return redirect('/login')
 
 class Signup(View):
@@ -71,23 +71,19 @@ class Signup(View):
           }
         return render(request, 'carsys/index.html', context)
       
-      context = {
-        'error_message': 'You need to log in first!',
-        'key2': 'world',
-        }
-      return render(request, 'carsys/login.html', context)
       username = request.POST.get('username')
+      pwd = request.POST.get('password')
       #saves user info
       profile = Profile()
       profile.username=username
-      profile.set_password(request.POST.get('password'))
+      profile.set_password(pwd)
       profile.first_name=request.POST.get('f_name')
       profile.last_name=request.POST.get('l_name')
       profile.address=request.POST.get('address')
       profile.license_id=request.POST.get('lic_ID')
       profile.contact_no=request.POST.get('cont_no')
 
-      #does the username exists
+      #does the username exist
       if User.objects.filter(username=username).exists():
         print 'rejected'
         context = {
@@ -98,11 +94,15 @@ class Signup(View):
       else:        
         print 'added'
         profile.save()
+        user = authenticate(request, username=username, password=pwd)
+        login(request, user)
+        request.session['signup'] = True
+        
         context = {
         'user_data': username,
         'led': 'on',
         }
-        return render(request, 'carsys/index.html',context)
+        return redirect('/')
 
 class Login(View):
   template_name = 'carsys/login.html'

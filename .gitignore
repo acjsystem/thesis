@@ -3,6 +3,5 @@ __pycache__
 *.tmp
 *.swp
 *.log
-settings.py
 keys.json
 db.sqlite3

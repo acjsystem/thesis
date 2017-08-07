@@ -11,7 +11,7 @@ class Profile(User):
   contact_no = models.CharField(max_length=250)
 
   def __str__(self):
-		return self.first_name + ' ' + self.last_name
+        return self.first_name + ' ' + self.last_name
 
 class Car(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -33,5 +33,5 @@ class Report(models.Model):
 	car_loc = models.CharField(max_length=100)
   	#this is the probable thief of the car
   	#use reports.rep_person.url
+
  	rep_photo = models.FileField()
-  
