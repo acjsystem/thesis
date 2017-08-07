@@ -28,4 +28,5 @@ class ProfileAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Car)
-admin.site.register(Reports)
+
+admin.site.register(Report)
