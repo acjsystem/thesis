@@ -22,7 +22,7 @@ class Car(models.Model):
 	def __str__(self):
 		return self.plate_no
 
-class Report(models.Model):
+class Reports(models.Model):
 	#we'll call all user info then get the user license ID to report
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 
