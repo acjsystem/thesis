@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Profile,Car,Reports
+from .models import *
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
@@ -28,4 +28,4 @@ class ProfileAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Car)
-admin.site.register(Reports)
+admin.site.register(Report)
