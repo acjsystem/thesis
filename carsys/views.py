@@ -39,7 +39,7 @@ class Index(View):
           'user_data': request.user.username,
           'led': led,
           }
-          print "success"          
+          print ("success")
           return render(request, 'carsys/index.html', context)
 
 class Logout(View):      
@@ -85,14 +85,14 @@ class Signup(View):
 
       #does the username exist
       if User.objects.filter(username=username).exists():
-        print 'rejected'
+        print ('rejected')
         context = {
         'error_message': 'Username is taken',
         'key2': 'world',
         }     
         return render(request, self.template_name, context) 
       else:        
-        print 'added'
+        print ('added')
         profile.save()
         user = authenticate(request, username=username, password=pwd)
         login(request, user)
@@ -139,14 +139,14 @@ class Login(View):
           'user_data': username,
           'led': 'on',
           }
-          print "success"          
+          print ("success")
           return redirect('/')
         else:
           context = {
           'error_message': 'Invalid Username/Password',
           'key2': 'world',
           }
-          print "Fail"
+          print ("Fail")
           return render(request, self.template_name, context)
       
 
