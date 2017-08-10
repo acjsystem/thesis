@@ -17,6 +17,7 @@ class Car(models.Model):
 	plate_no = models.CharField(max_length=100)
 	car_model = models.CharField(max_length=100)
 	#true if stolen/carjacked false if not
+	#on first car_stat true, send location
 	car_stat = models.BooleanField(default=False)
 
 	def __str__(self):
@@ -26,6 +27,8 @@ class Report(models.Model):
 	#we'll call all user info then get the user license ID to report
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	car_id = models.ForeignKey(Car, on_delete=models.CASCADE)
+	#this column is for card ignition true for carstop false for not
+	car_ignition = models.BooleanField(default=False)
 	#taser can never be activated again unless there is change in report status
 	taser_stat = models.BooleanField(default=False)
 	#has the incident been reported or not?
