@@ -5,11 +5,12 @@ from django.contrib.auth import login, authenticate
 from .forms import UserForm
 from django.views.generic import View
 from django.http import JsonResponse
-from .models import Profile
+from .models import *
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your views here.
 
@@ -18,7 +19,104 @@ class Index(View):
     template_name = 'carsys/index.html'    
     
     def get(self, request,):
-      signup = request.session.pop('signup', False)
+      #signup = request.session.pop('signup', False)
+      if request.user.is_authenticated():
+        q = Car.objects.filter(user=request.user)
+        selected_car = request.POST.get('car')
+        context = {
+        'user_data': request.user.username,
+        'q': q,
+        'selected_car': selected_car,
+        }
+        return render(request, self.template_name, context)
+      else:
+        context = {
+          'error_message': 'You need to log in first!',
+          }
+        return render(request, 'carsys/login.html', context)
+    def post(self, request,):      
+      if request.user.is_authenticated():
+          q = Car.objects.filter(user=request.user)
+          selected_car = request.POST.get('car')
+          qcar = Car.objects.filter(plate_no=selected_car)[0]
+          if not Report.objects.filter(car_id=qcar):
+            report='here'
+          else:
+            report = Report.objects.filter(car_id=qcar)[0]
+          context = {
+          'user_data': request.user.username,
+          'q': q,
+          'selected_car': qcar,
+          'report': report,
+          }
+          print ("success")
+          return render(request, self.template_name, context)
+
+class Caron(View):      
+  def post(self, request,):      
+      if request.user.is_authenticated():          
+          selected_car = request.POST.get('selcar')
+          qcar = Car.objects.filter(plate_no=selected_car)[0]
+          qcar.car_stat = True
+          qcar.save()          
+          print ("success car on")
+          return redirect('/')
+
+class Caroff(View):      
+  def post(self, request,):      
+      if request.user.is_authenticated():          
+          selected_car = request.POST.get('selcar')
+          qcar = Car.objects.filter(plate_no=selected_car)[0]
+          rep=Report()
+          #turn car off
+          if request.POST.get('carstem'):
+            qcar.car_stat = request.POST.get('carstem')
+            rep.user=Car.objects.filter(plate_no=selected_car)[0].user
+            rep.car_id = qcar
+            rep.car_ignition = False;
+            rep.taser_stat = False;
+            rep.report_stat = False;
+            rep.car_loc_stat = False;
+            rep.date_reported = datetime.now();
+            rep.car_photo_stat = False;
+          else:
+            qcar.car_stat = True;
+            rep.user=Car.objects.filter(plate_no=selected_car)[0].user
+            rep.car_id = qcar
+            rep.date_reported = datetime.now();
+            if request.POST.get('ignition'):
+              rep.car_ignition=request.POST.get('ignition')
+            else:
+              rep.car_ignition = False;
+            if request.POST.get('taser'):
+              rep.taser_stat=request.POST.get('taser')
+            else:
+              rep.taser_stat = False;
+            if request.POST.get('report'):
+              rep.report_stat=request.POST.get('report')
+            else:
+              rep.report_stat = False;
+            if request.POST.get('location'):
+              rep.car_loc_stat=request.POST.get('location')
+            else:
+              rep.car_loc_stat = False;
+            if request.POST.get('photo'):
+              rep.car_photo_stat=request.POST.get('photo')  
+            else:
+              rep.car_photo_stat = False;
+          rep.save()
+          qcar.save()          
+          #report table
+          
+          
+          print ("success car updates")
+          return redirect('/')
+
+class AddCar(View):
+    template_name = 'carsys/add_car.html'    
+    
+    def get(self, request,):
+      #signup = request.session.pop('signup', False)
       if request.user.is_authenticated():
         context = {
           'user_data': request.user.username,
@@ -32,15 +130,30 @@ class Index(View):
           }
         return render(request, 'carsys/login.html', context)
     def post(self, request,):
-      
       if request.user.is_authenticated():
-          led = request.POST.get('led')
+        car=Car()
+        car.user = request.user
+        plate_no = request.POST.get('plate_no')      
+        car.plate_no=plate_no
+        car.car_model=request.POST.get('car_mo')
+        car.car_stat=False
+        #does the username exist
+        if Car.objects.filter(plate_no=plate_no).exists():
+          print ('rejected')
           context = {
-          'user_data': request.user.username,
-          'led': led,
+          'error_message': 'That car is already added!',
+          }     
+          return render(request, self.template_name, context) 
+        else:        
+          print ('caradded')
+          car.save()
+          return redirect('/')
+      else:
+        context = {
+          'error_message': 'You need to log in first!',
+          'key2': 'world',
           }
-          print ("success")
-          return render(request, 'carsys/index.html', context)
+        return render(request, 'carsys/login.html', context)
 
 class Logout(View):      
   def get(self, request):

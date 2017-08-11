@@ -1,3 +1,5 @@
+{% extends 'carsys/base.html' %}
+{% block title %} Home {% endblock title %}
 {% block body %}
 <h2>dis index yay</h2>
 <h2>{{ led }} </h2>
@@ -6,18 +8,81 @@
 <form action="{% url 'carsys:logout' %}">
     <input type="submit" value="Logout" />
 </form>
+
 <form action="" method="post">
 {% csrf_token %}
-  <input type="radio" name="led" value="On"
-  {% ifequal led "On" %}
-  checked
-  {% endifequal %}
-  > On<br>
-  <input type="radio" name="led" value="Off" 
-  {% ifequal led "Off" %}
-  checked
-  {% endifequal %}
-  > Off<br>
+    {% for plate_no in q %}   
+  <input type="radio" name="car" value="{{plate_no}}"
+  >{{plate_no}}
+  {% endfor %}</br>
   <input type="submit" value="Submit" />
 </form>
+
+{% if selected_car is not NONE %}
+YOU SELECTED CAR <strong> {{ selected_car.plate_no }}</strong>
+  {{ selected_car.user }}
+  {{ selected_car.plate_no }}
+  {{ selected_car.car_model }}
+  {{ selected_car.car_stat }}
+
+{% if selected_car.car_stat is False %}
+<form action="{% url 'carsys:caron' %}"method="post">
+{% csrf_token %}
+    <input type="hidden" value="{{selected_car.plate_no}}" name='selcar' hidden/>
+    <input type="submit" value="Turn Car {{selected_car.plate_no}} ON" />
+</form>
+{% endif %}
+{% endif %}
+
+
+{% if selected_car.car_stat and selected_car is not NONE %}
+{{report}}
+{{report.user}}
+{{report.car_id}}
+{{report.car_ignition}}
+{{report.taser_stat}}
+{{report.report_stat}}
+{{report.car_loc_stat}}
+{{report.car_photo_stat}}
+<form action="{% url 'carsys:caroff' %}"method="post">
+{% csrf_token %}
+    <input type="checkbox" name="report" value="True" 
+    {% if report.report_stat %}
+    checked
+    disabled="disabled"
+    {% endif %}
+    >Report? </br>
+    <input type="checkbox" name="ignition" value="True" 
+    {% if report.car_ignition %}
+    checked
+    {% endif %}
+    >Ignition? </br>
+    <input type="checkbox" name="taser" value="True" 
+    {% if report.taser_stat %}
+    checked
+    disabled="disabled"
+    {% endif %}
+    >Taser? </br>
+    <input type="checkbox" name="location" value="True" 
+    {% if report.car_loc_stat %}
+    checked
+    {% endif %}
+    >Determine Location? </br>
+    <input type="checkbox" name="photo" value="True" 
+    {% if report.car_photo_stat %}
+    checked
+    {% endif %}
+    >Take Photo? </br>
+    <input type="checkbox" name="carstem" value="False">Turn Off System? </br>
+
+
+    <input type="hidden" value="{{selected_car.user}}" name='user' hidden/>
+    <input type="hidden" value="{{selected_car.plate_no}}" name='selcar' hidden/>
+    <input type="submit" value="I choose these options" />
+</form>
+{% endif %}
+
+
+<p>Add car <a href="{% url 'carsys:addcar' %}">here</a>.</p>
+
 {% endblock%}
