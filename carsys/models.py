@@ -34,27 +34,10 @@ class Report(models.Model):
 	#has the incident been reported or not?
 	report_stat = models.BooleanField(default=False) 
 	#this will show whether it was turned on or eventually turned off
-<<<<<<< HEAD
-	date_reported = models.DateTimeField(auto_now=True)
-	#this is the location of the car
-	car_loc = models.CharField(max_length=100)
-	#when was location added?
-	#car_loc_date = models.DateTimeField(auto_now_add=True)
-  	#this is the probable thief of the car
-  	#use reports.rep_person.url
-	rep_photo = models.FileField()
-	#when was photo added?
-	#car_photo_date = models.DateTimeField(auto_now_add=True)
-	#does user want location?
-	car_loc_stat = models.BooleanField(default=False)
-	#does user want photo?	
-	car_photo_stat = models.BooleanField(default=False)
-=======
 	date_reported = models.DateTimeField(auto_now_add=True)
 	#this is the location of the car
 	car_loc = models.CharField(max_length=100)
   #this is the probable thief of the car
   #use reports.rep_person.url
 	rep_photo = models.FileField()
->>>>>>> abcd6019858b232c41d3836a755d3ec21fcef0a3
 
