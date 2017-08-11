@@ -1,0 +1,17 @@
+{% extends 'carsys/base.html' %}
+{% block title %} Add Car {% endblock title %}
+{% block body %}
+<form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+            {% endif %}
+            Plate No: <input type="text" name="plate_no"><br>
+            Car Model: <input type="text" name="car_mo"><br>
+                        
+            <button type="submit" class="btn btn-success">Add Car</button>
+</form>
+{{key2}}
+<p>Go back <a href="{% url 'carsys:index' %}">here</a>.</p>
+
+{% endblock%}
