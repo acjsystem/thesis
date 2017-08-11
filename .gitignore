@@ -5,3 +5,4 @@ __pycache__
 *.log
 keys.json
 db.sqlite3
+settings.py
