@@ -1,19 +1,119 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status,generics
+from .serializers import *
 from django.contrib.auth import login, authenticate
 from .forms import UserForm
 from django.views.generic import View
 from django.http import JsonResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from datetime import datetime
 
 # Create your views here.
+#List all users or create
+class ProfileList(APIView):
+  #getting all users
+  def get(self,request):
+    user = Profile.objects.all()
+    serializer = ProfileSerializer(user, many=True)
+    return Response(serializer.data)
+
+  def post(self):
+    #this is for adding new user
+    serializer = SnippetSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+class ProfileDetail(APIView):
+  def get_object(self, pk):
+    """
+    obj = get_object_or_404(Profile,pk=pk)
+    return obj
+    """
+    try:
+      return Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
+      raise Http404
+
+
+  def get(self,request,pk):
+    #this is for getting of user data
+    user = self.get_object(pk)
+    serializer = ProfileSerializer(user)
+    return Response(serializer.data)
+
+  def post(self,request,pk):
+    #this is for create of user data
+    #this should not have anything
+    pass
+
+  def put(self,request,pk):
+    #this is for update of user data
+    user = self.get_object(pk)
+    serializer = ProfileSerializer(user, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+  def delete(self, request, pk, format=None):
+    #for deleting user
+    user = self.get_object(pk)
+    user.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CarList(APIView):
+  def get(self,request):
+    user = Car.objects.all()
+    serializer = CarSerializer(user, many=True)
+    return Response(serializer.data)
+
+  def post(self):
+    pass
+
+class CarDetail(APIView):
+  def get_object(self, plate_no):
+    """
+    obj = get_object_or_404(Profile,pk=pk)
+    return obj
+    """
+    try:
+      return Car.objects.get(plate_no=plate_no)
+    except Profile.DoesNotExist:
+      raise Http404
+
+
+  def get(self,request,plate_no):
+    #this is for getting of car data
+    car = self.get_object(plate_no)
+    serializer = CarSerializer(car)
+    return Response(serializer.data)
+
+  def put(self,request,plate_no):
+    #this is for update of car data
+    car = self.get_object(plate_no)
+    serializer = CarSerializer(car, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+  def delete(self, request, plate_no, format=None):
+    #for deleting car
+    car = self.get_object(plate_no)
+    car.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class Index(View):
