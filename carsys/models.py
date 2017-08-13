@@ -48,4 +48,3 @@ class Report(models.Model):
 	car_loc_stat = models.BooleanField(default=False)
 	#does user want photo?	
 	car_photo_stat = models.BooleanField(default=False)
-
