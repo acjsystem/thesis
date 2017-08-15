@@ -1,0 +1,23 @@
+
+FOR RPI(PRIORITY)
+>INITIAL RUN GETS USER DATA (PHONE NUMBER AND PLATENUMBER)./
+>shows car and car_stat then if true get reports./
+>sends data status if there is new gps data
+>gets data status and implements
+>send location status when detected
+
+API
+>create one for adding car
+--for rpi
+--rpi code flow
+
+FOR JAVA
+>log in that returns accepted and not ./
+>registration ./
+>update for car status
+>log in redirects to cars page and details 
+>button to turn on or not
+>send update from phone to car db
+>logout for user
+
+NOTE: when getting user data make sure add .id to query for user in profiledetail

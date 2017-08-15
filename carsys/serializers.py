@@ -21,6 +21,23 @@ class CarSerializer(serializers.ModelSerializer):
 			'plate_no',
 			'car_stat'
 		]
+
+class ReportSerializer(serializers.ModelSerializer):
+	#user = ProfileSerializer()
+	class Meta:
+		model = Report
+		fields = '__all__'
+		extra_kwargs = {
+        'taser_stat': {'required': False},
+        'report_stat': {'required': False},
+        'car_ignition': {'required': False},
+        'car_loc': {'required': False},
+        'rep_photo': {'required': False},
+        'car_loc_stat': {'required': False},
+        'car_photo_stat': {'required': False},
+    } 		
+	 
+
 """
 class UserLogin(serializers.ModelSerializer):
 	#user = ProfileSerializer()

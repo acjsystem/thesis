@@ -14,9 +14,12 @@ urlpatterns = [
     url(r'^caron/$', views.Caron.as_view(), name='caron'),
     url(r'^caroff/$', views.Caroff.as_view(), name='caroff'),
     url(r'^proflist/$', views.ProfileList.as_view(), name='proflist'),
-    url(r'^proflist/(?P<pk>[0-9]+)$', views.ProfileDetail.as_view(), name='proflistdet'),
+    url(r'^profdetail/$', views.ProfileDetail.as_view(), name='proflistdet'),
     url(r'^carlist/$', views.CarList.as_view(), name='carlist'),
-    url(r'^carlist/(?P<plate_no>\w+)$', views.CarDetail.as_view(), name='carlistdet'),
+    url(r'^cardetail/$', views.CarDetail.as_view(), name='carlistdet'),
+    url(r'^auth/$', views.Auth.as_view(), name='auth'),
+    url(r'^userdata/$', views.UserData.as_view(), name='userdata'),
+    url(r'^addreport/$', views.AddReport.as_view(), name='addrep'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
