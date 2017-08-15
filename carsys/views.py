@@ -1,23 +1,26 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status,generics
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
-from django.contrib.auth import login, authenticate
 from .forms import UserForm
-from django.views.generic import View
-from django.http import JsonResponse
 from .models import *
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, logout
+from django.views.generic import View
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
-
-from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.http import HttpResponse, Http404, JsonResponse
 from datetime import datetime
+import json
 
+
+"""
+START OF DJANGO REST
+"""
 # Create your views here.
 #List all users or create
 class ProfileList(APIView):
@@ -27,95 +30,175 @@ class ProfileList(APIView):
     serializer = ProfileSerializer(user, many=True)
     return Response(serializer.data)
 
-  def post(self):
+  def post(self,request):
     #this is for adding new user
-    serializer = SnippetSerializer(data=request.data)
+    serializer = ProfileSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 class ProfileDetail(APIView):
-  def get_object(self, pk):
-    """
-    obj = get_object_or_404(Profile,pk=pk)
-    return obj
-    """
-    try:
-      return Profile.objects.get(pk=pk)
-    except Profile.DoesNotExist:
-      raise Http404
-
-
-  def get(self,request,pk):
+  def get(self,request):
     #this is for getting of user data
-    user = self.get_object(pk)
-    serializer = ProfileSerializer(user)
-    return Response(serializer.data)
+    data={'acjcarsystem':'Phone updates car status'}
+    return Response(data)
 
-  def post(self,request,pk):
-    #this is for create of user data
-    #this should not have anything
-    pass
-
-  def put(self,request,pk):
+  def post(self,request):
     #this is for update of user data
-    user = self.get_object(pk)
-    serializer = ProfileSerializer(user, data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def delete(self, request, pk, format=None):
-    #for deleting user
-    user = self.get_object(pk)
-    user.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
-
+    data = {}
+    data['Error']="True"
+    #user = request.data['user']
+    plate_no = request.data['plate_no']
+    car_stat = request.data['car_stat']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.filter(plate_no=plate_no)[0]
+      car.car_stat = car_stat
+      car.save()
+      data['Error']="False"
+      data['user']=str(car.user)
+      data['plate_no']=str(car.plate_no)
+      data['car_stat']=str(car.car_stat)
+      return Response(data,)
+    data['error_message']="No car found."
+    return Response(data, status=status.HTTP_400_BAD_REQUEST)
+ 
 class CarList(APIView):
   def get(self,request):
     user = Car.objects.all()
     serializer = CarSerializer(user, many=True)
     return Response(serializer.data)
 
-  def post(self):
+  def post(self):    
+    carstate = Car.objects.all()
     pass
 
 class CarDetail(APIView):
-  def get_object(self, plate_no):
-    """
-    obj = get_object_or_404(Profile,pk=pk)
-    return obj
-    """
-    try:
-      return Car.objects.get(plate_no=plate_no)
-    except Profile.DoesNotExist:
-      raise Http404
+  
+  def get(self,request):
+    data={'acjcarsystem':'RPi gets reports'}
+    return Response(data)
 
+  def post(self, request,):
+    #this is for adding new user
+    plate_no = request.data['plate_no']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.get(plate_no=plate_no)
+      car_id=car.id
+      car_stat = car.car_stat
+      if car_stat:
+        #if Report.objects.filter(plate_no=plate_no).exists():
+        report=Report.objects.filter(car_id=car_id,car_loc="",rep_photo= "").order_by('-date_reported')[0]
+        user = report.user.id
+        car_id = report.car_id.id
+        ignition = report.car_ignition
+        taser = report.taser_stat
+        report_st=report.report_stat
+        date_reported=report.date_reported
+        car_loc_stat=report.car_loc_stat
+        car_photo_stat=report.car_photo_stat
+        print ('status is true')
+        data = {}
+        data['car']=str(car)
+        data['user']=str(user)
+        data['car_id']=str(car_id)
+        data['car_stat']=str(car_stat)
+        data['ignition']=str(ignition)
+        data['taser']=str(taser)
+        data['loc_stat']=str(car_loc_stat)
+        data['photo_stat']=str(car_photo_stat)
+        data['date_reported']=str(date_reported)
+        data['Error']="False"
+        return Response(data,)
+      else:
+        data = {}
+        data['car']=str(car)
+        data['car_stat']=str(car_stat)
+        data['Error']="False"
+        return Response(data,)
+    return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
 
-  def get(self,request,plate_no):
-    #this is for getting of car data
-    car = self.get_object(plate_no)
-    serializer = CarSerializer(car)
-    return Response(serializer.data)
+class AddReport(APIView):
+  
+  def get(self,request):
+    data={'acjcarsystem':'RPi sends reports'}
+    return Response(data)
 
-  def put(self,request,plate_no):
-    #this is for update of car data
-    car = self.get_object(plate_no)
-    serializer = CarSerializer(car, data=request.data)
+  def post(self, request,):
+    #this is for adding new user
+    serializer = ReportSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
-      return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def delete(self, request, plate_no, format=None):
-    #for deleting car
-    car = self.get_object(plate_no)
-    car.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+class Auth(APIView):
+  #getting all users
+  def get(self,request):
+    data={'acjcarsystem':'Login API'}
+    return Response(data)
+
+  def post(self, request,):
+    #this is for adding new user
+    username = request.data['username']
+    pwd = request.data['password']
+    user = authenticate(request, username=username, password=pwd)
+    login(request, user)
+    print (request.user.is_authenticated())
+    if user is not None:
+      if request.user.is_authenticated():
+        return Response({"user":"logined"},)
+      return redirect('/proflist')
+    else:
+      return Response({"user":"invalid login"},)
+
+class UserData(APIView):
+  def get(self,request):
+    data={'acjcarsystem':'RPi gets user number'}
+    return Response(data)
+
+  def post(self, request,):
+    #this is for adding new user
+    plate_no = request.data['plate_no']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.get(plate_no=plate_no)
+      user = car.user
+      car=car.plate_no
+      cont_no=Profile.objects.get(username=user).contact_no
+      #serializer = UserSerializer(car, data=request.data)
+      #if serializer.is_valid():
+      print ('found car')      
+      print (user)      
+      data = {}
+      data['car']=str(car)
+      data['username']=str(user)
+      data['cont_no']=str(cont_no)
+      return Response(data,)
+    return Response({'ERROR':'CAR0'}, status=status.HTTP_400_BAD_REQUEST)
+
+    """       
+      
+    username = request.data['car_no']
+    pwd = request.data['password']
+    user = authenticate(request, username=username, password=pwd)
+    login(request, user)
+    print (request.user.is_authenticated())
+    if user is not None:
+      if request.user.is_authenticated():
+        return Response({"user":"logined"},)
+      return redirect('/proflist')
+    else:
+      return Response({"user":"invalid login"},)
+      """
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+END OF DJANGO REST
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
+
+"""
+START OF DJANGO WEB
+"""
 class Index(View):
     template_name = 'carsys/index.html'    
     
@@ -362,5 +445,3 @@ class Login(View):
           }
           print ("Fail")
           return render(request, self.template_name, context)
-      
-

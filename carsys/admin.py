@@ -25,8 +25,24 @@ class ProfileAdmin(admin.ModelAdmin):
             )
     readonly_fields = (
             )
+
+class ReportAdmin(admin.ModelAdmin):
+    list_display = (
+            'user',
+            'car_ignition',
+            'taser_stat',
+            'report_stat',
+            'date_reported',
+            'car_loc',
+            )
+    list_filter = ('date_reported', 'user',
+           )
+    search_fields = (
+            )
+    readonly_fields = ('date_reported',
+            )
 # Register your models here.
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Car)
 
-admin.site.register(Report)
+admin.site.register(Report, ReportAdmin)
