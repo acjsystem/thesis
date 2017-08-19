@@ -69,9 +69,33 @@ class CarList(APIView):
     serializer = CarSerializer(user, many=True)
     return Response(serializer.data)
 
-  def post(self):    
-    carstate = Car.objects.all()
-    pass
+  def post(self,request):    
+    #add car
+    user = request.data['user']
+    plate_no = request.data['plate_no']
+    car_model = request.data['car_model']
+    if User.objects.filter(username=user).exists():
+      user = User.objects.filter(username=user)[0]
+      car = Car()
+      car.user = user
+      car.plate_no = plate_no
+      car.car_model = car_model
+      car.car_stat = False
+      #does the username exist
+      if Car.objects.filter(plate_no=plate_no).exists():
+        print ('rejected')
+        return Response({'Error':'Car already exists'}, status=status.HTTP_400_BAD_REQUEST) 
+      else:        
+        print ('caradded')
+        car.save()
+        data = {}
+        data['user'] = str(car.user)
+        data['plate_no'] = str(car.plate_no)
+        data['car_model'] = str(car.car_model)
+        data['car_stat'] = str(car.car_stat)
+        return Response(data,)
+    else:
+      return Response({'Error':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CarDetail(APIView):
   

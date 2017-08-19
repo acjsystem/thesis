@@ -9,7 +9,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 		extra_kwargs = {
         'address': {'required': False},
         'license_id': {'required': False},
-        'contact_no': {'required': False},
     } 
 
 class CarSerializer(serializers.ModelSerializer):
