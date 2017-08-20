@@ -115,7 +115,7 @@ class ChangeCarStat(APIView):
         car.car_stat = False
         rep = Report()
         rep.user=user
-        rep.car_id = car_id
+        rep.car_id = car
         rep.car_ignition = False
         rep.taser_stat = False
         rep.car_loc_stat = False
