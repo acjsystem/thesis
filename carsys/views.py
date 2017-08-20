@@ -107,7 +107,7 @@ class ChangeCarStat(APIView):
     if Car.objects.filter(plate_no=plate_no).exists():
       car = Car.objects.get(plate_no=plate_no)
       user = car.user
-      car_id=car.car_id
+      car_id=car.id
       if car_stat == "True":
         car.car_stat = True
         car.save()
