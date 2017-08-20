@@ -117,6 +117,11 @@ class ChangeCarStat(APIView):
       data ['car_id'] = car_id
       data ['car_stat'] = car_stat
       data ['plate_no'] = plate_no
+      data ['Error'] = plate_no
+      return Response(data,)
+    else:
+      data = {}
+      data['Error']="True"
       return Response(data,)
 
 class CarDetail(APIView):
