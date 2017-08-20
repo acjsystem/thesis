@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^auth/$', views.Auth.as_view(), name='auth'),
     url(r'^userdata/$', views.UserData.as_view(), name='userdata'),
     url(r'^addreport/$', views.AddReport.as_view(), name='addrep'),
+    url(r'^changecarstat/$', views.ChangeCarStat.as_view(), name='changecarstat'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

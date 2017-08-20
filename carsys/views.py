@@ -96,6 +96,28 @@ class CarList(APIView):
         return Response(data,)
     else:
       return Response({'Error':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+class ChangeCarStat(APIView):
+  def get(self,request):
+    data={'acjcarsystem':'RPi changes carstat'}
+    return Response(data)
+
+  def post(self,request):
+    plate_no = request.data['plate_no']
+    car_stat = request.data['car_stat']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.get(plate_no=plate_no)
+      car_id=car.id
+      if car_stat == "True":
+        car.car_stat = True
+        car.save()
+      else:
+        car.car_stat = False
+        car.save()
+      data ={}
+      data ['car_id'] = car_id
+      data ['car_stat'] = car_stat
+      data ['plate_no'] = plate_no
+      return Response(data,)
 
 class CarDetail(APIView):
   
