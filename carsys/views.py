@@ -106,18 +106,27 @@ class ChangeCarStat(APIView):
     car_stat = request.data['car_stat']
     if Car.objects.filter(plate_no=plate_no).exists():
       car = Car.objects.get(plate_no=plate_no)
-      car_id=car.id
+      user = car.user
+      car_id=car.car_id
       if car_stat == "True":
         car.car_stat = True
         car.save()
       else:
         car.car_stat = False
+        rep = Report()
+        rep.user=user
+        rep.car_id = car_id
+        rep.car_ignition = False
+        rep.taser_stat = False
+        rep.car_loc_stat = False
+        rep.car_photo_stat = False
+        rep.save()
         car.save()
       data ={}
       data ['car_id'] = car_id
       data ['car_stat'] = car_stat
       data ['plate_no'] = plate_no
-      data ['Error'] = plate_no
+      data ['Error'] = "False"
       return Response(data,)
     else:
       data = {}
