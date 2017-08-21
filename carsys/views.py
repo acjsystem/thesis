@@ -186,7 +186,7 @@ class AddReport(APIView):
 
   def post(self, request,):
     #this is for adding new user
-    serializer = ReportSerializer(data=request.data,file=request.file)
+    serializer = ReportSerializer(data=request.data)#,files=request.files
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
