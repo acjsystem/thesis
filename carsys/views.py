@@ -286,7 +286,7 @@ class Index(View):
           if not Report.objects.filter(car_id=qcar):
             report='here'
           else:
-            report = Report.objects.filter(car_id=qcar,car_loc="",rep_photo="")[0]
+            report = Report.objects.filter(car_id=qcar,car_loc="",rep_photo="").order_by('-date_reported')[0]
           context = {
           'user_data': request.user.username,
           'q': q,
