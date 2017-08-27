@@ -65,9 +65,11 @@ class ProfileDetail(APIView):
  
 class CarList(APIView):
   def get(self,request):
-    user = Car.objects.all()
-    serializer = CarSerializer(user, many=True)
-    return Response(serializer.data)
+    #user = Car.objects.all()
+    #serializer = CarSerializer(user, many=True)
+    data = {}
+    data['Carlist'] = "Add car"
+    return Response(data)
 
   def post(self,request):    
     #add car
@@ -203,9 +205,10 @@ class Auth(APIView):
     username = request.data['username']
     pwd = request.data['password']
     user = authenticate(request, username=username, password=pwd)
-    login(request, user)
-    print (request.user.is_authenticated())
+    
     if user is not None:
+      login(request, user)
+      print (request.user.is_authenticated())
       if request.user.is_authenticated():
         return Response({"user":"logined"},)
       return redirect('/proflist')
