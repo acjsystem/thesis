@@ -292,8 +292,21 @@ class Auth(APIView):
       login(request, user)
       print (request.user.is_authenticated())
       if request.user.is_authenticated():
-        return Response({"user":"logined"},)
-      return redirect('/proflist')
+        data = {}
+        data['user'] = "logined"
+        
+        if Car.objects.filter(user=username)[0].exists:
+          car = Car.objects.filter(user=username)[0]
+          car_stat = car.car_stat
+          car_plate = car.plate_no
+          data['car_stat'] = car_stat
+          data['car_plate'] = car_plate
+        else:
+          data['car_stat'] = "0"
+          data['car_plate'] = "0"
+          
+        return Response(data,)
+      #return redirect('/proflist')
     else:
       return Response({"user":"invalid login"},)
 
