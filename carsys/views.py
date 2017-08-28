@@ -295,7 +295,7 @@ class Auth(APIView):
         data = {}
         data['user'] = "logined"
         
-        if Car.objects.filter(user=username)[0].exists:
+        if Car.objects.filter(user=username).exists:
           car = Car.objects.filter(user=username)[0]
           car_stat = car.car_stat
           car_plate = car.plate_no
