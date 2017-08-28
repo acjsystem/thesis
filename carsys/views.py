@@ -294,8 +294,8 @@ class Auth(APIView):
       if request.user.is_authenticated():
         data = {}
         data['user'] = "logined"
-        user = User()
-        u_num = user.objects.get(username = username,password = pwd).id 
+        
+        u_num = User.objects.get(username = username,password = pwd).id 
         if Car.objects.filter(user = u_num).exists:
           car = Car.objects.filter(user = u_num)[0]
           car_stat = car.car_stat
