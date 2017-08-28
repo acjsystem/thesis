@@ -301,6 +301,24 @@ class Auth(APIView):
           car = Car.objects.filter(user = u_num)[0]
           car_stat = car.car_stat
           car_plate = car.plate_no
+          car_id = car.id
+          if Report.objects.filter(car_id=car_id,car_loc="",rep_photo= "").exists():
+            report = Report.objects.filter(car_id=car_id,car_loc="",rep_photo= "").order_by('-date_reported')[0]
+            ignition = report.car_ignition
+            taser = report.taser_stat
+            car_loc_stat = report.car_loc_stat
+            car_photo_stat = report.car_photo_stat
+
+            data['ignition'] = str(ignition)
+            data['taser'] = str(taser)
+            data['loc_stat'] = str(car_loc_stat)
+            data['photo_stat'] = str(car_photo_stat)
+          else:
+            data['ignition'] = "False"
+            data['taser'] = "False"
+            data['loc_stat'] = "False"
+            data['photo_stat'] = "False"
+          
           data['car_stat'] = car_stat
           data['car_plate'] = car_plate
         else:
