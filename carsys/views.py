@@ -32,11 +32,91 @@ class ProfileList(APIView):
 
   def post(self,request):
     #this is for adding new user
-    serializer = ProfileSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    username = request.data['username']
+    pwd = request.data['password']
+    last_name = request.data['last_name']
+    first_name = request.data['first_name']
+    #saves user info
+    profile = Profile()
+    profile.username = username
+    profile.set_password(pwd)
+    profile.first_name = first_name
+    profile.last_name = last_name
+    profile.address = request.data['address']
+    profile.license_id = request.data['license_id']
+    profile.contact_no = request.data['contact_no']
+
+    #does the username exist
+    if User.objects.filter(username=username).exists():
+      print ('rejected')
+      data = {
+      'Error': 'Username is taken'
+      }     
+      return Response(data,)
+    elif User.objects.filter(last_name=last_name,first_name=first_name).exists():
+      print('rejected')
+      data = {
+      'Error':'User already exists!'
+      }
+      return Response(data,)
+    else:        
+      print ('added')
+      profile.save()
+
+      data = {
+      'Success': "User added.",
+      }
+      return Response(data,)
+    return Response(data,)
+
+class UserDetail(APIView):
+  #getting all users
+  def get(self,request):
+    user = Profile.objects.all()
+    serializer = ProfileSerializer(user, many=True)
+    return Response(serializer.data)
+
+  def post(self,request):
+    #update user info
+    username = request.data['username']
+    pwd = request.data['password']
+    last_name = request.data['last_name']
+    first_name = request.data['first_name']
+    #saves user info
+
+    #does the username exist
+    if User.objects.filter(username=username).exists():
+      user = authenticate(request, username=username, password=pwd)
+      if user is not None:
+        profile = Profile.objects.filter(username=username)[0]
+        print ('accepted')
+        profile.username = username
+        profile.set_password(pwd)
+        profile.first_name = first_name
+        profile.last_name = last_name
+        profile.address = request.data['address']
+        profile.license_id = request.data['license_id']
+        profile.contact_no = request.data['contact_no']
+        profile.save()
+        data = {
+        'Success': 'Changes were saved!'
+        }     
+        return Response(data,)
+      else:
+        data = {
+        'Error': 'Incorrect Password!'
+        }     
+        return Response(data,)
+
+    else:        
+      print ('rejected')
+      data = {
+      'Error': "User doesn't exist!",
+      }
+      return Response(data,)
+    return Response(data,)
+
+
 
 class ProfileDetail(APIView):
   def get(self,request):
@@ -98,6 +178,7 @@ class CarList(APIView):
         return Response(data,)
     else:
       return Response({'Error':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
 class ChangeCarStat(APIView):
   def get(self,request):
     data={'acjcarsystem':'RPi changes carstat'}
@@ -192,7 +273,8 @@ class AddReport(APIView):
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Auth(APIView):
   #getting all users
@@ -228,8 +310,6 @@ class UserData(APIView):
       user = car.user
       car=car.plate_no
       cont_no=Profile.objects.get(username=user).contact_no
-      #serializer = UserSerializer(car, data=request.data)
-      #if serializer.is_valid():
       print ('found car')      
       print (user)      
       data = {}
@@ -239,20 +319,8 @@ class UserData(APIView):
       return Response(data,)
     return Response({'ERROR':'CAR0'}, status=status.HTTP_400_BAD_REQUEST)
 
-    """       
-      
-    username = request.data['car_no']
-    pwd = request.data['password']
-    user = authenticate(request, username=username, password=pwd)
-    login(request, user)
-    print (request.user.is_authenticated())
-    if user is not None:
-      if request.user.is_authenticated():
-        return Response({"user":"logined"},)
-      return redirect('/proflist')
-    else:
-      return Response({"user":"invalid login"},)
-      """
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 END OF DJANGO REST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
