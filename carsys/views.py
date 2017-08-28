@@ -295,8 +295,9 @@ class Auth(APIView):
         data = {}
         data['user'] = "logined"
         
-        u_num = User.objects.get(username = username,password = pwd).id 
-        if Car.objects.filter(user = u_num).exists:
+        user_num = User.objects.filter(username = username)
+        u_num = user_num[0].id
+        if Car.objects.filter(user = u_num).exists():
           car = Car.objects.filter(user = u_num)[0]
           car_stat = car.car_stat
           car_plate = car.plate_no
@@ -317,7 +318,7 @@ class UserData(APIView):
     return Response(data)
 
   def post(self, request,):
-    #this is for adding new user
+    #tget car num
     plate_no = request.data['plate_no']
     if Car.objects.filter(plate_no=plate_no).exists():
       car = Car.objects.get(plate_no=plate_no)
