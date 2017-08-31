@@ -22,6 +22,55 @@ import json
 START OF DJANGO REST
 """
 # Create your views here.
+
+class CarPhoto(APIView):
+  
+  def get(self,request):
+    data={'acjcarsystem':'RPi gets reports'}
+    return Response(data)
+
+  def post(self, request,):
+    #this is for adding new user
+    plate_no = request.data['plate_no']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.get(plate_no=plate_no)
+      car_id=car.id
+      car_stat = car.car_stat
+      if car_stat:
+        if Report.objects.filter(car_id=car_id).excludes(car_loc="").exists():
+          report=Report.objects.filter(car_id=car_id).excludes(car_loc="").order_by('-date_reported')[0]
+          user = report.user.id
+          car_id = report.car_id.id
+          car_loc = report.car_id.car_loc
+          date_reported=report.date_reported
+          print ('status is true')
+          data = {}
+          data['car']=str(car)
+          data['user']=str(user)
+          data['car_id']=str(car_id)
+          data['car_loc']=str(car_loc)
+          data['date_reported']=str(date_reported)
+          data['Error']="False"
+          return Response(data,)
+        else:          
+          data = {}
+          data['car']=str(car)
+          data['status']="No reports"
+          data['Error']="True"
+          return Response(data,)
+      else:
+        data = {}
+        data['car']=str(car)
+        data['car_stat']=str(car_stat)
+        data['Error']="False"
+        return Response(data,)
+    return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
 class CarLocation(APIView):
   
   def get(self,request):
