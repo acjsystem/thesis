@@ -38,10 +38,10 @@ class CarPhoto(APIView):
       car_stat = car.car_stat
       if car_stat:
         if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-          report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')[0]
+          report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0]
           user = report.user.id
           car_id = report.car_id.id
-          car_loc = report.car_id.car_loc
+          car_loc = report.rep_photo
           date_reported=report.date_reported
           print ('status is true')
           data = {}
@@ -89,7 +89,7 @@ class CarLocation(APIView):
           report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')[0]
           user = report.user.id
           car_id = report.car_id.id
-          car_loc = report.car_id.car_loc
+          car_loc = report.car_loc
           date_reported=report.date_reported
           print ('status is true')
           data = {}
