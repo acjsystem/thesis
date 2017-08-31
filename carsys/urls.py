@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^userdetail/$', views.UserDetail.as_view(), name='userdetail'),
     url(r'^addreport/$', views.AddReport.as_view(), name='addrep'),
     url(r'^changecarstat/$', views.ChangeCarStat.as_view(), name='changecarstat'),
+    url(r'^carloc/$', views.CarLocation.as_view(), name='carloc'),
+    url(r'^carphoto/$', views.CarPhoto.as_view(), name='carphoto'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
