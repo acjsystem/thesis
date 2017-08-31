@@ -36,8 +36,8 @@ class CarLocation(APIView):
       car_id=car.id
       car_stat = car.car_stat
       if car_stat:
-        if Report.objects.filter(car_id=car_id,car_loc!="").exists():
-          report=Report.objects.filter(car_id=car_id,car_loc!="").order_by('-date_reported')[0]
+        if Report.objects.filter(car_id=car_id).excludes(car_loc="").exists():
+          report=Report.objects.filter(car_id=car_id).excludes(car_loc="").order_by('-date_reported')[0]
           user = report.user.id
           car_id = report.car_id.id
           car_loc = report.car_id.car_loc
