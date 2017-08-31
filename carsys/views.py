@@ -271,6 +271,7 @@ class CarList(APIView):
         data['plate_no'] = str(car.plate_no)
         data['car_model'] = str(car.car_model)
         data['car_stat'] = str(car.car_stat)
+        data['Error'] = "False"
         return Response(data,)
     else:
       return Response({'Error':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
