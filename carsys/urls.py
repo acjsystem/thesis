@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^changecarstat/$', views.ChangeCarStat.as_view(), name='changecarstat'),
     url(r'^carloc/$', views.CarLocation.as_view(), name='carloc'),
     url(r'^carphoto/$', views.CarPhoto.as_view(), name='carphoto'),
+    url(r'^carlocs/$', views.CarLocations.as_view(), name='carlocs'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

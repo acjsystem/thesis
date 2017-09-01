@@ -8,6 +8,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .forms import UserForm
 from .models import *
+from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import View
@@ -16,7 +18,6 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404, JsonResponse
 from datetime import datetime
 import json
-
 
 """
 START OF DJANGO REST
@@ -38,7 +39,16 @@ class CarPhoto(APIView):
       car_stat = car.car_stat
       if car_stat:
         if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-          report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0]
+          report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')
+          #report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')
+          #data = json.dumps(list(report), cls=DjangoJSONEncoder)
+          #data = json.dumps(report.__dict__)
+          #obj = MyModel.objects.get(pk=id)
+          #data = serializers.serialize('json', [report])
+          #struct = json.loads(data)
+          #data = json.dumps(struct[0])
+
+          """
           user = report.user.id
           car_id = report.car_id.id
           car_loc = report.rep_photo
@@ -51,6 +61,49 @@ class CarPhoto(APIView):
           data['car_loc']=str(car_loc)
           data['date_reported']=str(date_reported)
           data['Error']="False"
+          """
+          #return Response(data,)
+          #qs = SomeModel.objects.all()
+          #data = jsonpickle.encode(report)
+          data = serializers.serialize('json', report)
+          struct = json.loads(data)
+          data = json.dumps(struct)
+          return Response(data,)
+        else:          
+          data = {}
+          data['car']=str(car)
+          data['status']="No reports"
+          data['Error']="True"
+          return Response(data,)
+      else:
+        data = {}
+        data['car']=str(car)
+        data['car_stat']=str(car_stat)
+        data['Error']="False"
+        return Response(data,)
+    return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
+
+class CarLocations(APIView):
+  #returns 10 locations
+  def get(self,request):
+    data={'acjcarsystem':'RPi gets reports'}
+    return Response(data)
+
+  def post(self, request,):
+    #this is for adding new user
+    plate_no = request.data['plate_no']
+    if Car.objects.filter(plate_no=plate_no).exists():
+      car = Car.objects.get(plate_no=plate_no)
+      car_id=car.id
+      car_stat = car.car_stat
+      if car_stat:
+        if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
+          #report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')
+          report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')
+          
+          data = serializers.serialize('json', report)
+          struct = json.loads(data)
+          data = json.dumps(struct)
           return Response(data,)
         else:          
           data = {}
@@ -85,8 +138,8 @@ class CarLocation(APIView):
       car_id=car.id
       car_stat = car.car_stat
       if car_stat:
-        if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-          report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')[0]
+        if Report.objects.filter(car_id=car_id).exclude(car_loc="").exclude(car_loc="Location Not Fixed.").exists():
+          report=Report.objects.filter(car_id=car_id).exclude(car_loc="").exclude(car_loc="Location Not Fixed.").order_by('-date_reported')[0]
           user = report.user.id
           car_id = report.car_id.id
           car_loc = report.car_loc
@@ -103,7 +156,7 @@ class CarLocation(APIView):
         else:          
           data = {}
           data['car']=str(car)
-          data['status']="No reports"
+          data['status']="No location"
           data['Error']="True"
           return Response(data,)
       else:
