@@ -491,12 +491,14 @@ class UserData(APIView):
     if Car.objects.filter(plate_no=plate_no).exists():
       car = Car.objects.get(plate_no=plate_no)
       user = car.user
+      car_id = car.id
       car=car.plate_no
       cont_no=Profile.objects.get(username=user).contact_no
       print ('found car')      
       print (user)      
       data = {}
       data['car']=str(car)
+      data['car_id']=str(car_id)
       data['username']=str(user)
       data['cont_no']=str(cont_no)
       return Response(data,)
