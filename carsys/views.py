@@ -503,6 +503,34 @@ class UserData(APIView):
       data['cont_no']=str(cont_no)
       return Response(data,)
     return Response({'ERROR':'CAR0'}, status=status.HTTP_400_BAD_REQUEST)
+  
+class UserInfo(APIView):
+  def get(self,request):
+    data={'acjcarsystem':'Phone gets user info'}
+    return Response(data)
+
+  def post(self, request,):
+    #tget car num
+    username = request.data['username']
+    if Profile.objects.filter(username=username).exists():
+      prof = Profile.objects.filter(username=username)[0]
+      f_name = prof.first_name
+      l_name = prof.last_name
+      email = prof.email
+      contact_no = prof.contact_no
+      license_id = prof.license_id
+      
+      print ('userinfo')      
+      print (user)      
+      data = {}
+      data['f_name']=str(f_name)
+      data['l_name']=str(l_name)
+      data['email']=str(email)
+      data['contact_no']=str(contact_no)
+      data['license_id']=str(license_id)
+      data['Error']="False"
+      return Response(data,)
+    return Response({'Error':'No user found'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
