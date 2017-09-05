@@ -521,7 +521,7 @@ class UserInfo(APIView):
       license_id = prof.license_id
       
       print ('userinfo')      
-      print (user)      
+      print (username)      
       data = {}
       data['f_name']=str(f_name)
       data['l_name']=str(l_name)
