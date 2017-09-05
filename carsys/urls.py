@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^cardetail/$', views.CarDetail.as_view(), name='carlistdet'),
     url(r'^auth/$', views.Auth.as_view(), name='auth'),
     url(r'^userdata/$', views.UserData.as_view(), name='userdata'),
+    url(r'^userinfo/$', views.UserInfo.as_view(), name='userinfo'),
     url(r'^userdetail/$', views.UserDetail.as_view(), name='userdetail'),
     url(r'^addreport/$', views.AddReport.as_view(), name='addrep'),
     url(r'^changecarstat/$', views.ChangeCarStat.as_view(), name='changecarstat'),
