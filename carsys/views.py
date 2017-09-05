@@ -243,7 +243,7 @@ class UserDetail(APIView):
         profile.set_password(pwd)
         profile.first_name = first_name
         profile.last_name = last_name
-        profile.address = request.data['address']
+        profile.email = request.data['email']
         profile.license_id = request.data['license_id']
         profile.contact_no = request.data['contact_no']
         profile.save()
