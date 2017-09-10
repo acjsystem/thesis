@@ -8,6 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .forms import UserForm
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
@@ -38,41 +39,47 @@ class CarPhoto(APIView):
       car_id=car.id
       car_stat = car.car_stat
       if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
+        """if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
           report0=""
           date0=""
-        else:
+        else:"""
+        try:
           report0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].rep_photo
           date0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].date_reported
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].exists():
-          report1=""
-          date1=""
-        else:
+        except ObjectDoesNotExist:
+          report0=""
+          date0=""
+        
+         try:
           report1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].rep_photo
           date1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].date_reported
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].exists():
-          report2=""
-          date2=""
-        else:
+        except ObjectDoesNotExist:
+          report1=""
+          date1=""
+         
+        try:
           report2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].rep_photo
           date2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].date_reported
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].exists():
-          report3=""
-          date3=""
-        else:
+        except ObjectDoesNotExist:
+          report2=""
+          date2=""
+        
+        try:
           report3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].rep_photo
           date3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].date_reported
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].exists():
-          report4=""
-          date4=""
-        else:
+        except ObjectDoesNotExist:
+          report3=""
+          date3=""
+        
+
+        try:
           report4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].rep_photo
           date4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].date_reported
+        except ObjectDoesNotExist:
+          report4=""
+          date4=""
 
-        user = report.user.id
-        car_id = report.car_id.id
-        car_loc = report.rep_photo
-        date_reported=report.date_reported
+        
         print ('status is true')
         data = {}
         data['report0']=str(report0)
