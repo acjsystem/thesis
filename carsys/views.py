@@ -46,28 +46,28 @@ class CarPhoto(APIView):
         try:
           report0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].rep_photo
           date0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].date_reported
-        except ObjectDoesNotExist:
+        except IndexError:
           report0=""
           date0=""
         
         try:
           report1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].rep_photo
           date1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].date_reported
-        except ObjectDoesNotExist:
+        except IndexError:
           report1=""
           date1=""
          
         try:
           report2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].rep_photo
           date2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].date_reported
-        except ObjectDoesNotExist:
+        except IndexError:
           report2=""
           date2=""
         
         try:
           report3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].rep_photo
           date3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].date_reported
-        except ObjectDoesNotExist:
+        except IndexError:
           report3=""
           date3=""
         
@@ -75,7 +75,7 @@ class CarPhoto(APIView):
         try:
           report4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].rep_photo
           date4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].date_reported
-        except ObjectDoesNotExist:
+        except IndexError:
           report4=""
           date4=""
 
