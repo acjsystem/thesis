@@ -166,27 +166,119 @@ class CarLocations(APIView):
       car = Car.objects.get(plate_no=plate_no)
       car_id=car.id
       car_stat = car.car_stat
-      if car_stat:
-        if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-          #report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')
-          report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')
+      if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
+        """if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
+          report0=""
+          date0=""
+        else:"""
+        try:
+          report0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].car_loc
+          date0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].date_reported
+        except IndexError:
+          report0=""
+          date0=""
+        
+        try:
+          report1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].car_loc
+          date1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].date_reported
+        except IndexError:
+          report1=""
+          date1=""
+         
+        try:
+          report2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].car_loc
+          date2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].date_reported
+        except IndexError:
+          report2=""
+          date2=""
+        
+        try:
+          report3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].car_loc
+          date3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].date_reported
+        except IndexError:
+          report3=""
+          date3=""
+        
+
+        try:
+          report4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].car_loc
+          date4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].date_reported
+        except IndexError:
+          report4=""
+          date4=""
+        try:
+          report5=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[5].car_loc
+          date5=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[5].date_reported
+        except IndexError:
+          report5=""
+          date5=""
           
-          data = serializers.serialize('json', report)
-          struct = json.loads(data)
-          data = json.dumps(struct)
-          return Response(data,)
-        else:          
-          data = {}
-          data['car']=str(car)
-          data['status']="No reports"
-          data['Error']="True"
-          return Response(data,)
-      else:
+        try:
+          report6=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[6].car_loc
+          date6=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[6].date_reported
+        except IndexError:
+          report6=""
+          date6=""
+        
+        try:
+          report7=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[7].car_loc
+          date7=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[7].date_reported
+        except IndexError:
+          report7=""
+          date7=""
+        
+        
+        try:
+          report8=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[8].car_loc
+          date8=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[8].date_reported
+        except IndexError:
+          report8=""
+          date8=""
+        
+        
+        try:
+          report9=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[9].car_loc
+          date9=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[9].date_reported
+        except IndexError:
+          report9=""
+          date9=""
+        
+        print ('status is true')
+        data = {}
+        data['report0']=str(report0)
+        data['date0']=str(date0)
+        data['report1']=str(report1)
+        data['date1']=str(date1)
+        data['report2']=str(report2)
+        data['date2']=str(date2)
+        data['report3']=str(report3)
+        data['date3']=str(date3)
+        data['report4']=str(report4)
+        data['date4']=str(date4)        
+        data['report5']=str(report5)
+        data['date5']=str(date5)        
+        data['report6']=str(report6)
+        data['date6']=str(date6)       
+        data['report7']=str(report7)
+        data['date7']=str(date7)        
+        data['report8']=str(report8)
+        data['date8']=str(date8)        
+        data['report9']=str(report9)
+        data['date9']=str(date9)
+        data['Error']="False"
+
+        return Response(data,)
+      else:          
         data = {}
         data['car']=str(car)
-        data['car_stat']=str(car_stat)
-        data['Error']="False"
+        data['status']="No reports"
+        data['Error']="True"
         return Response(data,)
+    else:
+      data = {}
+      data['status']="No car"
+      data['Error']="True"
+      return Response(data,)
     return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
 
 
