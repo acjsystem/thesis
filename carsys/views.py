@@ -8,6 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .forms import UserForm
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
@@ -38,12 +39,17 @@ class CarPhoto(APIView):
       car_id=car.id
       car_stat = car.car_stat
       if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
+        """if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
           report0=""
           date0=""
-        else:
+        else:"""
+        try:
           report0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].rep_photo
           date0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].date_reported
+        except ObjectDoesNotExist:
+          report0=""
+          date0=""
+        
         if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].exists():
           report1=""
           date1=""
