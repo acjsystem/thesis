@@ -78,7 +78,42 @@ class CarPhoto(APIView):
         except IndexError:
           report4=""
           date4=""
-
+        try:
+          report5=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[5].rep_photo
+          date5=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[5].date_reported
+        except IndexError:
+          report5=""
+          date5=""
+          
+        try:
+          report6=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[6].rep_photo
+          date6=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[6].date_reported
+        except IndexError:
+          report6=""
+          date6=""
+        
+        try:
+          report7=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[7].rep_photo
+          date7=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[7].date_reported
+        except IndexError:
+          report7=""
+          date7=""
+        
+        
+        try:
+          report8=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[8].rep_photo
+          date8=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[8].date_reported
+        except IndexError:
+          report8=""
+          date8=""
+        
+        
+        try:
+          report9=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[9].rep_photo
+          date9=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[9].date_reported
+        except IndexError:
+          report9=""
+          date9=""
         
         print ('status is true')
         data = {}
@@ -91,7 +126,17 @@ class CarPhoto(APIView):
         data['report3']=str(report3)
         data['date3']=str(date3)
         data['report4']=str(report4)
-        data['date4']=str(date4)
+        data['date4']=str(date4)        
+        data['report5']=str(report5)
+        data['date5']=str(date5)        
+        data['report6']=str(report6)
+        data['date6']=str(date6)       
+        data['report7']=str(report7)
+        data['date7']=str(date7)        
+        data['report8']=str(report8)
+        data['date8']=str(date8)        
+        data['report9']=str(report9)
+        data['date9']=str(date9)
         data['Error']="False"
 
         return Response(data,)
