@@ -103,10 +103,8 @@ class CarPhoto(APIView):
         return Response(data,)
     else:
       data = {}
-      data['car']=str(car)
-      data['car_stat']=str(car_stat)
       data['status']="No car"
-      data['Error']="False"
+      data['Error']="True"
       return Response(data,)
     return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
 
