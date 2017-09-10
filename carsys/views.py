@@ -37,50 +37,70 @@ class CarPhoto(APIView):
       car = Car.objects.get(plate_no=plate_no)
       car_id=car.id
       car_stat = car.car_stat
-      if car_stat:
-        if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
-          report=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')
-          #report=Report.objects.filter(car_id=car_id).exclude(car_loc="").order_by('-date_reported')
-          #data = json.dumps(list(report), cls=DjangoJSONEncoder)
-          #data = json.dumps(report.__dict__)
-          #obj = MyModel.objects.get(pk=id)
-          #data = serializers.serialize('json', [report])
-          #struct = json.loads(data)
-          #data = json.dumps(struct[0])
+      if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
+        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
+          report0=""
+          date0=""
+        else:
+          report0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].rep_photo
+          date0=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].date_reported
+        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].exists():
+          report1=""
+          date1=""
+        else:
+          report1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].rep_photo
+          date1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].date_reported
+        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].exists():
+          report2=""
+          date2=""
+        else:
+          report2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].rep_photo
+          date2=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[2].date_reported
+        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].exists():
+          report3=""
+          date3=""
+        else:
+          report3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].rep_photo
+          date3=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[3].date_reported
+        if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].exists():
+          report4=""
+          date4=""
+        else:
+          report4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].rep_photo
+          date4=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[4].date_reported
 
-          """
-          user = report.user.id
-          car_id = report.car_id.id
-          car_loc = report.rep_photo
-          date_reported=report.date_reported
-          print ('status is true')
-          data = {}
-          data['car']=str(car)
-          data['user']=str(user)
-          data['car_id']=str(car_id)
-          data['car_loc']=str(car_loc)
-          data['date_reported']=str(date_reported)
-          data['Error']="False"
-          """
-          #return Response(data,)
-          #qs = SomeModel.objects.all()
-          #data = jsonpickle.encode(report)
-          data = serializers.serialize('json', report)
-          struct = json.loads(data)
-          data = json.dumps(struct)
-          return Response(data,)
-        else:          
-          data = {}
-          data['car']=str(car)
-          data['status']="No reports"
-          data['Error']="True"
-          return Response(data,)
-      else:
+        user = report.user.id
+        car_id = report.car_id.id
+        car_loc = report.rep_photo
+        date_reported=report.date_reported
+        print ('status is true')
+        data = {}
+        data['report0']=str(report0)
+        data['date0']=str(date0)
+        data['report1']=str(report1)
+        data['date1']=str(date1)
+        data['report2']=str(report2)
+        data['date2']=str(date2)
+        data['report3']=str(report3)
+        data['date3']=str(date3)
+        data['report4']=str(report4)
+        data['date4']=str(date4)
+        data['Error']="False"
+
+        return Response(data,)
+      else:          
         data = {}
         data['car']=str(car)
-        data['car_stat']=str(car_stat)
-        data['Error']="False"
+        data['status']="No reports"
+        data['Error']="True"
         return Response(data,)
+    else:
+      data = {}
+      data['car']=str(car)
+      data['car_stat']=str(car_stat)
+      data['status']="No car"
+      data['Error']="False"
+      return Response(data,)
     return Response({'Error':'True'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CarLocations(APIView):
