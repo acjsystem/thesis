@@ -38,7 +38,7 @@ class CarPhoto(APIView):
       car = Car.objects.get(plate_no=plate_no)
       car_id=car.id
       car_stat = car.car_stat
-      if Report.objects.filter(car_id=car_id).exclude(car_loc="").exists():
+      if Report.objects.filter(car_id=car_id).exclude(car_photo="").exists():
         """if not Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[0].exists():
           report0=""
           date0=""
