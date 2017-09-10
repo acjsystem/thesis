@@ -50,7 +50,7 @@ class CarPhoto(APIView):
           report0=""
           date0=""
         
-         try:
+        try:
           report1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].rep_photo
           date1=Report.objects.filter(car_id=car_id).exclude(rep_photo="").order_by('-date_reported')[1].date_reported
         except ObjectDoesNotExist:
