@@ -541,6 +541,7 @@ class CarDetail(APIView):
       car = Car.objects.get(plate_no=plate_no)
       car_id=car.id
       car_stat = car.car_stat
+      user = car.user.id
       if car_stat:
         #if Report.objects.filter(plate_no=plate_no).exists():
         report=Report.objects.filter(car_id=car_id,car_loc="",rep_photo= "").order_by('-date_reported')[0]
@@ -568,6 +569,7 @@ class CarDetail(APIView):
       else:
         data = {}
         data['car']=str(car)
+        data['user']=str(user)
         data['car_stat']=str(car_stat)
         data['Error']="False"
         return Response(data,)
